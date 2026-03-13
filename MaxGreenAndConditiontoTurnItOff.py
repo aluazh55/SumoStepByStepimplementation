@@ -39,21 +39,28 @@ last_phase = traci.trafficlight.getPhase(TLS_ID)
 last_change_time = traci.simulation.getTime()
 
 
-def log_phase_duration():
-    """Calculates and prints the duration of the phase that just ended."""
+def log_phase_duration_and_traffic():
+    """Calculates phase duration and reports vehicle counts on detectors."""
     global last_phase, last_change_time
 
     current_phase = traci.trafficlight.getPhase(TLS_ID)
 
-    # Check if the phase has actually changed
+    # Check if the phase has changed
     if current_phase != last_phase:
         current_time = traci.simulation.getTime()
         duration = current_time - last_change_time
 
-        # Get the state string (e.g., "GrGr") to identify color if needed
-        state = traci.trafficlight.getRedYellowGreenState(TLS_ID)
+        # Get vehicle counts from detectors at this specific moment
+        count_s = traci.lanearea.getLastStepVehicleNumber(DET_SOUTH)
+        count_w = traci.lanearea.getLastStepVehicleNumber(DET_WEST)
 
-        print(f"Phase {last_phase} ended. Duration: {duration:.2f} seconds. (State: {state})")
+        # Detailed Report
+        print("-" * 30)
+        print(f"PHASE CHANGE DETECTED AT {current_time:.2f}s")
+        print(f"Previous Phase: {last_phase} lasted {duration:.2f}s")
+        print(f"New Phase: {current_phase}")
+        print(f"Traffic Snapshot -> South: {count_s} cars | West: {count_w} cars")
+        print("-" * 30)
 
         # Update trackers
         last_phase = current_phase
@@ -61,10 +68,13 @@ def log_phase_duration():
 
 
 def step_sim(steps=1):
-    """Custom step function to ensure we check for phase changes every step."""
+    """Moves simulation forward and checks for phase/traffic updates."""
     for _ in range(steps):
         traci.simulationStep()
-        log_phase_duration()
+        # Call the reporting function every step to catch the exact transition
+        log_phase_duration_and_traffic()
+
+
 
 
 # Step 7: Define Functions (Modified to use our step_sim)
