@@ -1,7 +1,7 @@
 import traci
 
 # Start your simulation
-traci.start(["sumo", "-c", "Test1.sumocfg", "-a", "Test1.add.xml"])
+traci.start(["sumo-gui", "-c", "Test1.sumocfg", "-a", "Test1.add.xml"])
 
 while traci.simulation.getMinExpectedNumber() > 0:
     traci.simulationStep()

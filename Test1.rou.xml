@@ -10,5 +10,5 @@
     <trip id="t_2" depart="0.00" from="E2" to="E2.84"/>
     <trip id="t_3" depart="0.00" from="E3" to="E4"/>
     <flow id="f_0" begin="0.00" end="3600.00" perHour="1800.00" from="E2" to="E2.84"/>
-    <trip id="t_4" depart="24.00" from="E3" to="E4"/>
+    <trip id="t_4" depart="80.00" from="E3" to="E4"/>
 </routes>
